@@ -9,7 +9,7 @@ options = Options()
 options.add_argument('--headless')
 client = MongoClient()
 db = client['uversion']
-collect = db['bibleLackTest']
+collect = db['bibleLack']
 
 oldBooks = ['GEN','EXO','LEV','NUM','DEU','JOS','JUG','RUT','1SA','2SA','1KI','2KI','1CH','2CH','EZR','NEH','EST','JOB','PSM','PRO','ECC','SON','ISA','JER','LAM','EZE','DAN','HOS','JOE','AMO','OBA','JON','MIC','NAH','HAB','ZEP','HAG','ZEC','MAL']
 newBooks = ['MAT','MAK','LUK','JHN','ACT','ROM','1CO','2CO','GAL','EPH','PHL','COL','1TS','2TS','1TI','2TI','TIT','PHM','HEB','JAS','1PE','2PE','1JN','2JN','3JN','JUD','REV']
@@ -31,7 +31,7 @@ for book in tqdm(books):
             verses = div.find_elements_by_class_name('verse')
             for verse in verses: # 節數
                 spans = verse.find_elements_by_class_name('add')
-                verseNum = verse.get_attribute('class')
+                verseNum = int(verse.get_attribute('class')[-1])
                 for span in spans: # 虛點點文字
                     collect.insert_one({'book': book, 'chap': (i+1), 'verse': verseNum, 'text': span.text})
 
