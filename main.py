@@ -31,8 +31,10 @@ for book in tqdm(books):
             verses = div.find_elements_by_class_name('verse')
             for verse in verses: # 節數
                 spans = verse.find_elements_by_class_name('add')
-                verseNum = int(verse.get_attribute('class')[-1])
+                verseNum = int(verse.get_attribute('class')[7:])
                 for span in spans: # 虛點點文字
                     collect.insert_one({'book': book, 'chap': (i+1), 'verse': verseNum, 'text': span.text})
+        
+        time.sleep(random.uniform(0, 1))
 
 driver.quit()
