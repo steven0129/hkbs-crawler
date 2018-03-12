@@ -15,10 +15,9 @@ oldBooks = ['GEN','EXO','LEV','NUM','DEU','JOS','JUG','RUT','1SA','2SA','1KI','2
 newBooks = ['MAT','MAK','LUK','JHN','ACT','ROM','1CO','2CO','GAL','EPH','PHL','COL','1TS','2TS','1TI','2TI','TIT','PHM','HEB','JAS','1PE','2PE','1JN','2JN','3JN','JUD','REV']
 books = oldBooks + newBooks
 
-driver = webdriver.Firefox(firefox_options=options, executable_path='./geckodriver')
-
 for book in tqdm(books):
-    
+    driver = webdriver.Firefox(firefox_options=options, executable_path='./geckodriver')
+
     driver.get('https://www.bible.com/zh-TW/bible/46/' + book)
     chapterList = driver.find_element_by_xpath("//ul[@class='chapter-list']").find_elements_by_tag_name('a')
     tqdm.write('處理中經卷: %s, 本卷書總章數: %d' % (book, len(chapterList)))
@@ -31,10 +30,10 @@ for book in tqdm(books):
             verses = div.find_elements_by_class_name('verse')
             for verse in verses: # 節數
                 spans = verse.find_elements_by_class_name('add')
-                verseNum = int(verse.get_attribute('class')[7:])
+                verseNum = verse.get_attribute('class')[6:]
                 for span in spans: # 虛點點文字
                     collect.insert_one({'book': book, 'chap': (i+1), 'verse': verseNum, 'text': span.text})
         
         time.sleep(random.uniform(0, 1))
-
-driver.quit()
+    
+    driver.quit()
